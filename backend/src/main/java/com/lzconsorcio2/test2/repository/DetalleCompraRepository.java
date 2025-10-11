@@ -42,17 +42,20 @@ public interface DetalleCompraRepository extends JpaRepository<DetalleCompra, In
     // Obtener cantidad total por compra
     @Query("SELECT SUM(d.quantity) FROM DetalleCompra d WHERE d.compra_id = :compraId")
     Long sumQuantityByCompraId(@Param("compraId") Integer compraId);
-    
+
+    @Query("SELECT SUM(d.quantity) FROM DetalleCompra d")
+    Long countTotalItemsSold();
+
     @Query("DELETE FROM DetalleCompra d WHERE d.compra_id = ?1 AND d.cuenta_id = ?2")
     @Modifying
     @Transactional
     void deleteByCompraIdAndCuentaId(Integer compraId, Integer cuentaId);
-    
+
     @Query("DELETE FROM DetalleCompra d WHERE d.compra_id = ?1")
     @Modifying
     @Transactional
     void deleteByCompraId(Integer compraId);
-    
+
     // Verificar si existe detalle por compra y cuenta
     @Query("SELECT CASE WHEN COUNT(d) > 0 THEN true ELSE false END FROM DetalleCompra d WHERE d.compra_id = ?1 AND d.cuenta_id = ?2")
     boolean existsByCompraIdAndCuentaId(Integer compraId, Integer cuentaId);

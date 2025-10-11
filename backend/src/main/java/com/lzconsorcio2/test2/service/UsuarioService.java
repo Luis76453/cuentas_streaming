@@ -4,13 +4,16 @@ package com.lzconsorcio2.test2.service;
 import com.lzconsorcio2.test2.model.Usuario;
 import com.lzconsorcio2.test2.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 @Service
 public class UsuarioService {
-        
+
     private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
@@ -35,7 +38,7 @@ public class UsuarioService {
     // Actualizar usuario
     public Usuario updateUsuario(Integer id, Usuario usuarioActualizado) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
-    
+
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
 
@@ -108,5 +111,16 @@ public class UsuarioService {
     public List<String> getAllEmails() {
         return usuarioRepository.findAllDistinctEmails();
     }
-}
 
+    // Obtener estadísticas de usuarios
+    public Map<String, Long> getUserStats() {
+        Map<String, Long> stats = new HashMap<>();
+        long totalUsers = usuarioRepository.count();
+        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
+        long newUsersLastMonth = usuarioRepository.countByCreatedAtAfter(lastMonth);
+
+        stats.put("totalUsers", totalUsers);
+        stats.put("newUsersLastMonth", newUsersLastMonth);
+        return stats;
+    }
+}

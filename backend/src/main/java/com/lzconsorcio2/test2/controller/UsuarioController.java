@@ -64,6 +64,14 @@ public class UsuarioController {
         return usuarioService.getUsuariosNoAdmin();
     }
 
+    // Obtener estadísticas de usuarios
+    @GetMapping("/users/stats")
+    public ResponseEntity<Map<String, Long>> getUserStats() {
+        Map<String, Long> stats = usuarioService.getUserStats();
+        return ResponseEntity.ok(stats);
+    }
+
+
     // Crear usuario
     @PostMapping("/users")
     public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario) {

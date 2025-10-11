@@ -55,7 +55,13 @@ public interface CompraRepository extends JpaRepository<Compra, Integer> {
     // Obtener compras del mes actual
     @Query("SELECT c FROM Compra c WHERE MONTH(c.created_at) = MONTH(CURRENT_DATE) AND YEAR(c.created_at) = YEAR(CURRENT_DATE)")
     List<Compra> findComprasThisMonth();
-    
+
+    @Query("SELECT SUM(c.total) FROM Compra c")
+    Double findTotalRevenue();
+
+    @Query("SELECT SUM(c.total) FROM Compra c WHERE c.created_at >= :startDate")
+    Double findTotalRevenueSince(@Param("startDate") LocalDateTime startDate);
+
     
     // Verificar si existe compra por id
     boolean existsById(Integer id);
