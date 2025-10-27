@@ -17,23 +17,54 @@ public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_transaccion;
 
-    // Foreign key hacia Compra (por convención similar)
     @Column(name = "compra_id", nullable = false)
     private Integer compra_id;
 
-    private String estado;
+    @Column(name = "user_id", nullable = false)
+    private Integer user_id;
 
-    @Column(name = "created_at")
+    @Column(name = "account_info", columnDefinition = "JSON")
+    private String account_info; // JSON se puede manejar como String
+
+    @Column(nullable = false)
+    private Double amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.Pendiente; // Valor por defecto
+
+    @Column(name = "transaction_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime created_at;
+    private LocalDateTime transaction_date;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updated_at;
 
     // Relación con Compra
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compra_id", insertable = false, updatable = false)
     private Compra compra;
 
+    // Relación con Usuario
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private Usuario usuario;
+
     @PrePersist
     protected void onCreate() {
-        created_at = LocalDateTime.now();
+        transaction_date = LocalDateTime.now();
+        updated_at = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = LocalDateTime.now();
+    }
+
+    public enum Status {
+        Completado,
+        Pendiente,
+        Fallido
     }
 }

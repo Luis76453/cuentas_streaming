@@ -1,4 +1,3 @@
-
 package com.lzconsorcio2.test2.service;
 
 import com.lzconsorcio2.test2.model.Usuario;
@@ -113,14 +112,16 @@ public class UsuarioService {
     }
 
     // Obtener estadísticas de usuarios
-    public Map<String, Long> getUserStats() {
-        Map<String, Long> stats = new HashMap<>();
+    public Map<String, Object> getUserStats() {
+        Map<String, Object> stats = new HashMap<>();
         long totalUsers = usuarioRepository.count();
         LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
         long newUsersLastMonth = usuarioRepository.countByCreatedAtAfter(lastMonth);
 
         stats.put("totalUsers", totalUsers);
-        stats.put("newUsersLastMonth", newUsersLastMonth);
+        stats.put("newUsers", newUsersLastMonth);
+        stats.put("userChangePercentage", 19.0); // Valor simulado
+
         return stats;
     }
 }

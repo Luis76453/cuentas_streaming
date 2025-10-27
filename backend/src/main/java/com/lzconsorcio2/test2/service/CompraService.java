@@ -38,12 +38,13 @@ public class CompraService {
 
     @Transactional
     public Compra createPurchaseWithDetails(Integer userId, List<PurchaseRequestDTO.CartItemDTO> items, Double total) {
+        // 1. Crear y guardar la Compra
         Compra compra = new Compra();
         compra.setUser_id(userId);
         compra.setTotal(total);
-        compra.setCreated_at(LocalDateTime.now());
         Compra savedCompra = registrarCompra(compra);
 
+        // 2. Crear y guardar los DetalleCompra
         for (PurchaseRequestDTO.CartItemDTO item : items) {
             DetalleCompra detalle = new DetalleCompra();
             detalle.setCompra_id(savedCompra.getId_compra());
@@ -54,12 +55,21 @@ public class CompraService {
             detalleCompraService.registrarDetalle(detalle);
         }
 
+        // 3. Generar credenciales simuladas
+        String username = "user" + UUID.randomUUID().toString().substring(0, 8);
+        String password = "pass" + UUID.randomUUID().toString().substring(0, 8);
+        String accountInfo = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+
+        // 4. Crear y guardar la Transaccion
         Transaccion transaccion = new Transaccion();
         transaccion.setCompra_id(savedCompra.getId_compra());
-        transaccion.setEstado("COMPLETADA");
-        transaccion.setCreated_at(LocalDateTime.now());
+        transaccion.setUser_id(userId);
+        transaccion.setAmount(total);
+        transaccion.setAccount_info(accountInfo);
+        transaccion.setStatus(Transaccion.Status.Pendiente);
         transaccionService.registrarTransaccion(transaccion);
 
+        // 5. Devolver la Compra guardada
         return savedCompra;
     }
 

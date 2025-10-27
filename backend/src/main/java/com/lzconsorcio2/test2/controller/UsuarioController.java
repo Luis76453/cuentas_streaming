@@ -1,5 +1,3 @@
-
-
 package com.lzconsorcio2.test2.controller;
 
 import com.lzconsorcio2.test2.model.Usuario;
@@ -65,9 +63,9 @@ public class UsuarioController {
     }
 
     // Obtener estadísticas de usuarios
-    @GetMapping("/users/stats")
-    public ResponseEntity<Map<String, Long>> getUserStats() {
-        Map<String, Long> stats = usuarioService.getUserStats();
+    @GetMapping("/users/statistics")
+    public ResponseEntity<Map<String, Object>> getUserStats() {
+        Map<String, Object> stats = usuarioService.getUserStats();
         return ResponseEntity.ok(stats);
     }
 
