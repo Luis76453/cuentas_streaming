@@ -73,7 +73,7 @@ export default function AdminDashboard() {
     const [transactions, setTransactions] = useState<BackendTransaction[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/purchases/statistics')
+        fetch('http://localhost:8080/api//purchases/stats')
             .then(res => res.json())
             .then(data => setStats(data));
 
@@ -81,9 +81,10 @@ export default function AdminDashboard() {
             .then(res => res.json())
             .then(data => setUserStats(data));
 
-        fetch('http://localhost:8080/api/transacciones')
+
+        /* fetch('http://localhost:8080/api/transacciones')
             .then(res => res.json())
-            .then(data => setTransactions(data));
+            .then(data => setTransactions(data)); */
 
     }, []);
 
